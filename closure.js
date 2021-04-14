@@ -1,3 +1,4 @@
+"use strict";
 function fill_the_array(start,end){
     let output_range = [];
     let curr_position = start;
