@@ -1,3 +1,4 @@
+"use strict";
 function randMax(max) {
     return Math.trunc(1E9 * Math.random()) % max;
 }
@@ -20,9 +21,8 @@ var reel = {
     }
 };
 
-function get_reel_simbol(position, shift){
-    let temp_reel = Object.create(reel);
-    temp_reel.position = position + shift;
+function get_reel_simbol(temp_reel, shift){
+    temp_reel.position = (temp_reel.symbols.length + temp_reel.position + shift) % temp_reel.symbols.length;
     return temp_reel.display();
 }
 
@@ -40,11 +40,14 @@ var slotMachine = {
     display() {
         var matrix = [[],[],[]];
         this.reels.forEach(function displayReel(reel){
-            matrix[0].push(get_reel_simbol(reel.position, -1));
-            matrix[1].push(reel.display());
-            matrix[2].push(get_reel_simbol(reel.position, 1));
+            var num_of_reels = 3
+            for (let pos = -1 * Math.trunc(num_of_reels/2); pos <= num_of_reels -1; pos++){
+                for (let line=0; line <=matrix.length; line++){
+                    matrix[line].push(get_reel_simbol(reel, pos));
+                }
+            }
         });
-        for (var cur_pos of matrix){
+        for (let cur_pos of matrix){
             console.log(`${cur_pos[0]} | ${cur_pos[1]} | ${cur_pos[2]}`);
         }
     }
