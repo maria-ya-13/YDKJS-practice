@@ -21,11 +21,6 @@ var reel = {
     }
 };
 
-function get_reel_simbol(temp_reel, shift){
-    temp_reel.position = (temp_reel.symbols.length + temp_reel.position + shift) % temp_reel.symbols.length;
-    return temp_reel.display();
-}
-
 var slotMachine = {
     reels: [
         Object.create(reel),
@@ -38,29 +33,29 @@ var slotMachine = {
         });
     },
     display() {
-        var matrix = [[],[],[]];
-        this.reels.forEach(function displayReel(reel){
-            var num_of_reels = 3
-            for (let pos = -1 * Math.trunc(num_of_reels/2); pos <= num_of_reels -1; pos++){
-                for (let line=0; line <=matrix.length; line++){
-                    matrix[line].push(get_reel_simbol(reel, pos));
+        let lines = [];
+        const num_of_reels = 3;
+        for (let pos = -1 * Math.trunc(num_of_reels / 2); pos < num_of_reels - 1; pos++) {
+            let line = this.reels.map(function get_line(reel) {
+                let slot = Object.create(reel);
+                slot.position = (reel.symbols.length + reel.position + pos) % reel.symbols.length;
+                    return reel.display.call(slot);
                 }
-            }
-        });
-        for (let cur_pos of matrix){
-            console.log(`${cur_pos[0]} | ${cur_pos[1]} | ${cur_pos[2]}`);
+            );
+            lines.push(line.join(" | "));
         }
+        return lines.join("\n");
     }
 };
 
 slotMachine.spin();
-slotMachine.display();
+console.log(slotMachine.display());
 // ☾ | ☀ | ★
 // ☀ | ♠ | ☾
 // ♠ | ♥ | ☀
 
 slotMachine.spin();
-slotMachine.display();
+console.log(slotMachine.display());
 // ♦ | ♠ | ♣
 // ♣ | ♥ | ☺
 // ☺ | ♦ | ★
