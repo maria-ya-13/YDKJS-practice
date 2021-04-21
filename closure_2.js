@@ -1,19 +1,13 @@
-//You will pass one or more values (as arguments) into toggle(..), and get back a function.
-// That returned function will alternate/rotate between all the passed-in values in order, one at a time, as it's called repeatedly.
+"use strict";
 
-function toggle(input_array) {
-    var storage = [];
-    storage.push(input_array);
-    var iter = storage[Symbol.iterator]();
-    // let result = iter.next();
-    // console.log(result.value);
-
-    return function get_next() {
-        // iter = storage[Symbol.iterator]();
-        let result = iter.next();
-        // iter = storage[++Symbol.iterator]()
-        console.log(result.value);
-
+function toggle(...input_array) {
+    var arr = input_array;
+    var eArr = arr[Symbol.iterator]();
+    return function next() {
+        let cur = eArr.next();
+        arr.push(cur.value);
+        console.log(cur.value);
+        return cur.value;
      }
 }
 
