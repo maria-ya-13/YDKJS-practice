@@ -15,7 +15,7 @@ function scheduleMeeting(startTime,durationMinutes) {
     let [start_hour, start_min] = from_time_to_numbers(startTime);
 
     let duration_hour = Math.floor(Number(durationMinutes) / 60);
-    let duration_min = Number(durationMinutes) - duration_hour*60;
+    let duration_min = Number(durationMinutes) % 60;
 
     let end_hour = start_hour + duration_hour;
     let end_minutes = start_min + duration_min;
