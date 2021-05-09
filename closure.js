@@ -1,7 +1,7 @@
 "use strict";
 function fill_the_array(start,end){
     let output_range = [];
-    for (let cur_position = start; cur_position <= end; cur_position+=1) {
+    for (let cur_position = start; cur_position <= end; cur_position++) {
         output_range.push(cur_position);
     }
     return output_range;
