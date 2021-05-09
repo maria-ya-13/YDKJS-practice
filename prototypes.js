@@ -1,3 +1,4 @@
+"use strict";
 function randMax(max) {
     return Math.trunc(1E9 * Math.random()) % max;
 }
@@ -20,12 +21,6 @@ var reel = {
     }
 };
 
-function get_reel_simbol(position, shift){
-    let temp_reel = Object.create(reel);
-    temp_reel.position = position + shift;
-    return temp_reel.display();
-}
-
 var slotMachine = {
     reels: [
         Object.create(reel),
@@ -38,26 +33,29 @@ var slotMachine = {
         });
     },
     display() {
-        var matrix = [[],[],[]];
-        this.reels.forEach(function displayReel(reel){
-            matrix[0].push(get_reel_simbol(reel.position, -1));
-            matrix[1].push(reel.display());
-            matrix[2].push(get_reel_simbol(reel.position, 1));
-        });
-        for (var cur_pos of matrix){
-            console.log(`${cur_pos[0]} | ${cur_pos[1]} | ${cur_pos[2]}`);
+        let lines = [];
+        const num_of_reels = 3;
+        for (let pos = -1 * Math.trunc(num_of_reels / 2); pos < num_of_reels - 1; pos++) {
+            let line = this.reels.map(function get_line(reel) {
+                let slot = Object.create(reel);
+                slot.position = (reel.symbols.length + reel.position + pos) % reel.symbols.length;
+                    return reel.display.call(slot);
+                }
+            );
+            lines.push(line.join(" | "));
         }
+        return lines.join("\n");
     }
 };
 
 slotMachine.spin();
-slotMachine.display();
+console.log(slotMachine.display());
 // ☾ | ☀ | ★
 // ☀ | ♠ | ☾
 // ♠ | ♥ | ☀
 
 slotMachine.spin();
-slotMachine.display();
+console.log(slotMachine.display());
 // ♦ | ♠ | ♣
 // ♣ | ♥ | ☺
 // ☺ | ♦ | ★
